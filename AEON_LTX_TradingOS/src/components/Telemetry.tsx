@@ -11,6 +11,7 @@ export const Telemetry = memo(function Telemetry() {
   const shown = filter === 'ALL' ? s.logs : s.logs.filter(l => l.lv === filter);
   return (
     <section className="panel" style={{ animationDelay: '0.3s' }}>
+      <span className="cnr" />
       <div className="p-head">
         <span className="p-title">▤ Data Stream — System Telemetry</span>
         <span className="p-badge mono" style={{ color: 'var(--sub)' }}>{s.logs.length} EVT</span>

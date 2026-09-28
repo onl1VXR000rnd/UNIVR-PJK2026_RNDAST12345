@@ -1,6 +1,7 @@
 import { memo } from 'react';
 import { useOS } from '../hooks';
 import { switchSymbol, setTf, setMode, type Mode } from '../lib/engine';
+import { OrbitRings } from './FuiFx';
 
 const TFS = ['M15', 'H1', 'H4', 'D1'];
 const MODES: { id: Mode; label: string }[] = [
@@ -13,9 +14,10 @@ export const TopBar = memo(function TopBar() {
   const s = useOS();
   return (
     <header className="topbar">
-      <div className="brand">
-        <h1>AEON<span>_LTX</span></h1>
-        <em className="upd">TradingOS v1.0 // CLASSIFIED-MOCK</em>
+      <div className="brand" style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+        <OrbitRings />
+        <h1 className="glitch" data-text="AEON_LTX">AEON<span>_LTX</span></h1>
+        <em className="upd">TradingOS v2.0 FUI // PHASE-2 TACTICAL</em>
         <span className="ws mono"><i className="dot" /> WS CONNECTED | {s.latencyMs}ms</span>
       </div>
       <div className="center-cluster">

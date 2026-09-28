@@ -15,12 +15,13 @@ export const CommandPad = memo(function CommandPad() {
 
   return (
     <section className="panel" style={{ animationDelay: '0.2s' }}>
+      <span className="cnr" />
       <div className="p-head">
         <span className="p-title">⌖ Command Pad — Quick Trade</span>
-        <span className="p-badge mono" style={{ color: aiMode ? 'var(--purple)' : 'var(--cyan)' }}>{s.mode.toUpperCase()}</span>
+        <span className="p-badge mono" style={{ color: aiMode ? 'var(--violet)' : 'var(--cyan)' }}>{s.mode.toUpperCase()}</span>
       </div>
       <div className="arm-row upd">
-        <span>{s.armed ? <b style={{ color: 'var(--green)' }}>● SYSTEM ARMED</b> : <b style={{ color: 'var(--amber)' }}>○ SAFE MODE</b>}</span>
+        <span>{s.armed ? <b style={{ color: 'var(--green)' }}>● SYSTEM ARMED</b> : <b style={{ color: 'var(--gold)' }}>○ SAFE MODE</b>}</span>
         {!aiMode && <button className={`arm-btn ${s.armed ? 'armed' : ''}`} onClick={toggleArm}>{s.armed ? 'DISARM' : 'ARM SYSTEM'}</button>}
       </div>
       <div className="lot-row mono">
@@ -37,12 +38,12 @@ export const CommandPad = memo(function CommandPad() {
           {[25, 50, 75, 100].map(p => <button key={p} className={pct === p ? 'on' : ''} onClick={() => setPct(p)}>{p}%</button>)}
         </div>
       )}
-      {reason && <div className="mono" style={{ fontSize: 10, color: 'var(--amber)', marginBottom: 8 }}>⚠ {reason}</div>}
+      {reason && <div className="mono" style={{ fontSize: 10, color: 'var(--gold)', marginBottom: 8 }}>⚠ {reason}</div>}
       <div className="exec-row">
         <button className="exec buy" disabled={blocked || aiMode} onClick={() => execute('BUY', lot)}>▲ BUY<span className="sub">{fmt(s.sym, s.price)} · {lot.toFixed(2)}L</span></button>
         <button className="exec sell" disabled={blocked || aiMode} onClick={() => execute('SELL', lot)}>▼ SELL<span className="sub">{fmt(s.sym, s.price)} · {lot.toFixed(2)}L</span></button>
       </div>
-      {aiMode && <div className="mono" style={{ fontSize: 10, color: 'var(--purple)', marginTop: 8 }}>🔮 AGENTIC MODE — execution owned by JEV core. Override available via telemetry kill-switch.</div>}
+      {aiMode && <div className="mono" style={{ fontSize: 10, color: 'var(--violet)', marginTop: 8 }}>🔮 AGENTIC MODE — execution owned by JEV core. Override available via telemetry kill-switch.</div>}
     </section>
   );
 });

@@ -37,6 +37,8 @@ export interface OSState {
   cascade: CascadeStage; cascadePct: number; cacheAgeMin: number; thinking: boolean;
   armed: boolean; positions: Position[]; logs: LogEntry[]; toasts: Toast[];
   typeline: string; tickCount: number;
+  /** FUI Phase 2 — global crisis drill & operator equity curve. */
+  crisis: boolean; equity: number; equityCurve: number[];
   /** Live mark price per symbol (simulated feed). */
   priceOf(sym: Sym): number;
 }
@@ -52,6 +54,7 @@ export const os = new Store<OSState>({
     { sym: 'BTCUSD', side: 'SELL', lot: 0.05, entry: 97980, tp: 96200, sl: 98750, openedAt: '11:02:57' },
   ],
   logs: [], toasts: [], typeline: '', tickCount: 0,
+  crisis: false, equity: 128450, equityCurve: Array.from({ length: 40 }, (_, i) => 120000 + i * 180 + Math.random() * 2400),
   priceOf: (sym: Sym): number => livePrices[sym],
 });
 
@@ -160,15 +163,39 @@ export function startEngine() {
       });
       if (tickN % 40 === 0) log('AI', '🧠 DeepSeek cache refreshed | Macro: CAUTIOUS_BEARISH');
       if (spread > 30) log('WARN', `⚠ Spread widened: ${spread}pts — approaching veto threshold`);
-      // update open position PnL implicitly via price render; occasional telemetry noise
+      // equity curve drift + open position PnL mark-to-market
+      const unrealized = s.positions.reduce((acc, p) => acc + (livePrices[p.sym] - p.entry) * (p.side === 'BUY' ? 1 : -1) * p.lot * 100, 0);
+      const eq = 128450 + unrealized + Math.sin(Date.now() / 60000) * 900;
+      const eqCurve = [...s.equityCurve.slice(-59), eq];
+      os.set({ equity: eq, equityCurve: eqCurve });
+      // occasional telemetry noise
       if (Math.random() < 0.12) log('INFO', ['Heartbeat OK', 'Orderflow delta sampled', 'Depth rebalanced', 'Risk engine sync'][Math.floor(Math.random() * 4)]);
       advanceCascade();
     }
     rafH = requestAnimationFrame(loop);
   };
   rafH = requestAnimationFrame(loop);
+
+  // Crisis drill: random volatility spikes that paint the whole terminal red for a few seconds
+  setInterval(() => {
+    if (!os.state.crisis && Math.random() < 0.06) triggerCrisis('VOLATILITY SPIKE DETECTED — MACRO SHOCK SIMULATION');
+  }, 10000);
 }
 export function stopEngine() { cancelAnimationFrame(rafH); }
+
+/* ---------- Crisis drill (manual key X or auto-random) ---------- */
+let crisisTimer: ReturnType<typeof setTimeout> | null = null;
+export function triggerCrisis(reason = 'OPERATOR-INITIATED CRISIS DRILL') {
+  if (os.state.crisis) return;
+  os.set({ crisis: true });
+  log('VETO', `🚨 CRISIS MODE ENGAGED — ${reason}`);
+  toast('err', '🚨 CRISIS DRILL ACTIVE');
+  if (crisisTimer) clearTimeout(crisisTimer);
+  crisisTimer = setTimeout(() => {
+    os.set({ crisis: false });
+    log('INFO', '✔ Crisis drill cleared — systems nominal');
+  }, 9000);
+}
 
 /* ---------- Actions ---------- */
 export function switchSymbol() {
@@ -210,4 +237,11 @@ export function closePosition(idx: number) {
   os.set({ positions: os.state.positions.filter((_, i) => i !== idx) });
   log('EXEC', `CLOSE ${p.side} ${p.sym} @ ${fmt(p.sym, os.state.price)} | Realized PnL ${pnl >= 0 ? '+' : ''}$${pnl.toFixed(2)}`);
   toast('info', `Position closed — PnL ${pnl >= 0 ? '+' : ''}$${pnl.toFixed(2)}`);
+}
+
+/** Select a symbol directly from the watchlist. */
+export function selectSymbol(sym: Sym) {
+  if (sym === os.state.sym) return;
+  os.set({ sym, price: livePrices[sym], prevPrice: livePrices[sym], dayOpen: livePrices[sym] * 0.998, candles: seedCandles(sym) });
+  log('INFO', `Watchlist focus → ${sym}`);
 }

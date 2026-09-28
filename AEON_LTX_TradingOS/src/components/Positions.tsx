@@ -7,6 +7,7 @@ export const Positions = memo(function Positions() {
   const totalPnl = s.positions.reduce((a, p) => a + (s.priceOf(p.sym as Sym) - p.entry) * (p.side === 'BUY' ? 1 : -1) * p.lot * 100, 0);
   return (
     <section className="panel" style={{ animationDelay: '0.25s' }}>
+      <span className="cnr" />
       <div className="p-head">
         <span className="p-title">Open Positions ({s.positions.length})</span>
         <span className="p-badge mono" style={{ color: totalPnl >= 0 ? 'var(--green)' : 'var(--red)' }}>

@@ -1,6 +1,6 @@
 import { memo, useEffect, useState } from 'react';
 import { useOS } from './hooks';
-import { startEngine } from './lib/engine';
+import { startEngine, triggerCrisis, toggleArm, execute } from './lib/engine';
 import { TopBar } from './components/TopBar';
 import { MarketPanel } from './components/MarketPanel';
 import { ChartPanel } from './components/ChartPanel';
@@ -8,6 +8,8 @@ import { AiNexus } from './components/AiNexus';
 import { CommandPad } from './components/CommandPad';
 import { Positions } from './components/Positions';
 import { Telemetry } from './components/Telemetry';
+import { SystemRail, PaletteCard } from './components/SystemRail';
+import { Particles, HexMesh, DataRain } from './components/FuiFx';
 
 const BOOT_LINES = [
   'BIOS POST ......................... <b>OK</b>',
@@ -48,21 +50,61 @@ const Toasts = memo(function Toasts() {
   );
 });
 
+const Clock = memo(function Clock() {
+  const [now, setNow] = useState(new Date());
+  useEffect(() => { const t = setInterval(() => setNow(new Date()), 1000); return () => clearInterval(t); }, []);
+  const utc = now.toISOString().slice(11, 19);
+  const wj = new Date(now.getTime() + 7 * 3600 * 1000).toISOString().slice(11, 19); // WIB = UTC+7
+  return (
+    <span className="clock mono">
+      <b>{utc}</b><small>UTC</small> · <b style={{ color: 'var(--gold)' }}>{wj}</b><small>WIB</small>
+    </span>
+  );
+});
+
 export default function App() {
   const [booted, setBooted] = useState(false);
+  const [palOpen, setPalOpen] = useState(false);
+  const s = useOS();
   useEffect(() => { if (booted) startEngine(); }, [booted]);
+  useEffect(() => {
+    document.body.classList.toggle('crisis', s.crisis);
+  }, [s.crisis]);
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if ((e.target as HTMLElement)?.tagName === 'INPUT') return;
+      const k = e.key.toLowerCase();
+      if (k === 'a') toggleArm();
+      else if (k === 'b') execute('BUY', 0.1);
+      else if (k === 's') execute('SELL', 0.1);
+      else if (k === 'x') triggerCrisis();
+      else if (k === 'p') setPalOpen(o => !o);
+    };
+    addEventListener('keydown', onKey);
+    return () => removeEventListener('keydown', onKey);
+  }, []);
   return (
     <div className="scanlines">
       <div className="void-bg" />
+      <Particles crisis={s.crisis} />
+      <HexMesh />
+      <DataRain />
       {!booted && <BootScreen done={() => setBooted(true)} />}
       {booted && (
         <>
+          {s.crisis && <><div className="crisis-edge" /><div className="crisis-banner upd">⚠ CRISIS DRILL ACTIVE — RISK ENGINE ELEVATED ⚠</div></>}
           <TopBar />
           <main className="grid-wrap">
             <div className="col"><MarketPanel /><AiNexus /></div>
             <div className="col col-mid"><ChartPanel /><Telemetry /></div>
             <div className="col"><CommandPad /><Positions /></div>
           </main>
+          <SystemRail />
+          <PaletteCard open={palOpen} />
+          <div className="kbd-hints">
+            <kbd><b>A</b> ARM</kbd><kbd><b>B</b> BUY</kbd><kbd><b>S</b> SELL</kbd><kbd><b>X</b> CRISIS</kbd><kbd><b>P</b> PALETTE</kbd>
+            <Clock />
+          </div>
           <Toasts />
         </>
       )}
