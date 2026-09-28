@@ -27,6 +27,7 @@ export const C = {
   violet: '#8400FF',
   red: '#FF0033',
   gold: '#FFC800',
+  green: '#00FF9D',
   text: '#EAF2FF',
   sub: '#7D8FB8',
   void: '#020308',
