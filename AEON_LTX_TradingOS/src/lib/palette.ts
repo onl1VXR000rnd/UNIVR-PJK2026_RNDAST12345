@@ -1,5 +1,7 @@
-/* ============ AEON_LTX — Full-Saturation Tactical Palette (HUE lab) ============ */
-/* Anti-pastel doctrine: every accent runs S >= 85%, L tuned for neon punch.     */
+/* ============ AEON_LTX v3.0 — "MIDNIGHT OPS" Restrained Tactical Palette ===== */
+/* Per references/UIUX_DESIGN.md §2: ~90% neutrals, ~7% cyan, ~2% ember,        */
+/* ~1% status/amber. Anti-pastel doctrine KEPT (full chroma accents), but the   */
+/* rainbow is retired: magenta folds into ember, violet demotes to cyan-dim.    */
 
 export interface Swatch {
   name: string;
@@ -10,27 +12,29 @@ export interface Swatch {
   role: string;
 }
 
-/** Canonical palette — blue / magenta / violet / red / gold, full chroma. */
+/** Canonical palette — v3.0 MIDNIGHT OPS: cyan signal + ember action + amber gold, full chroma. */
 export const PALETTE: Swatch[] = [
-  { name: 'VOID BLUE',   hex: '#0044FF', hue: 226, sat: 100, lit: 50, role: 'primary structural' },
-  { name: 'PLASMA CYAN', hex: '#00D4FF', hue: 191, sat: 100, lit: 50, role: 'bullish / HUD wire' },
-  { name: 'MAGENTA PRIME', hex: '#FF00A8', hue: 320, sat: 100, lit: 50, role: 'accent / AI nexus' },
-  { name: 'VIOLET CORE', hex: '#8400FF', hue: 270, sat: 100, lit: 50, role: 'depth field / cascade' },
-  { name: 'KILL RED',    hex: '#FF0033', hue: 345, sat: 100, lit: 50, role: 'bearish / veto / alarm' },
-  { name: 'REACTOR GOLD', hex: '#FFC800', hue: 47, sat: 100, lit: 50, role: 'signal / armed state' },
+  { name: 'SIGNAL CYAN', hex: '#5CE6EB', hue: 184, sat: 79, lit: 64, role: 'structure / data / live' },
+  { name: 'PLASMA CYAN', hex: '#00D4FF', hue: 191, sat: 100, lit: 50, role: 'glow wire (focal only)' },
+  { name: 'EMBER PRIME', hex: '#FF5A1F', hue: 16, sat: 100, lit: 56, role: 'action / emphasis / E-STOP' },
+  { name: 'EMBER DEEP', hex: '#A63A14', hue: 16, sat: 78, lit: 37, role: 'ember gradient base' },
+  { name: 'KILL RED',    hex: '#FF3B30', hue: 3, sat: 100, lit: 60, role: 'crit / veto / bearish' },
+  { name: 'REACTOR GOLD', hex: '#E5B84B', hue: 43, sat: 75, lit: 60, role: 'gold line / caution / armed' },
 ];
 
 export const C = {
-  blue: '#0044FF',
-  cyan: '#00D4FF',
-  magenta: '#FF00A8',
-  violet: '#8400FF',
-  red: '#FF0033',
-  gold: '#FFC800',
-  green: '#00FF9D',
-  text: '#EAF2FF',
-  sub: '#7D8FB8',
-  void: '#020308',
+  blue: '#4C9AFF',      /* info-only now */
+  cyan: '#5CE6EB',
+  cyanHot: '#00D4FF',
+  cyanDim: '#2A8F94',
+  magenta: '#FF5A1F',   /* folded into ember — legacy key kept for imports */
+  violet: '#2A8F94',    /* demoted to depth/dim — legacy key kept */
+  red: '#FF3B30',
+  gold: '#E5B84B',
+  green: '#3DDC84',
+  text: '#E8EEF4',
+  sub: '#9AA9B8',
+  void: '#05070A',
 } as const;
 
 /** rgba() helper from a #RRGGBB hex + alpha. */

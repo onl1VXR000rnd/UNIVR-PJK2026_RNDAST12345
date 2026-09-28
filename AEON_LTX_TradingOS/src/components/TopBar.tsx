@@ -17,7 +17,7 @@ export const TopBar = memo(function TopBar() {
       <div className="brand" style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
         <OrbitRings />
         <h1 className="glitch" data-text="AEON_LTX">AEON<span>_LTX</span></h1>
-        <em className="upd">TradingOS v2.0 FUI // PHASE-2 TACTICAL</em>
+        <em className="upd">TradingOS v3.0 // MIDNIGHT OPS</em>
         <span className="ws mono"><i className="dot" /> WS CONNECTED | {s.latencyMs}ms</span>
       </div>
       <div className="center-cluster">

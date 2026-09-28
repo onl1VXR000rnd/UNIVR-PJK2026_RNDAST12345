@@ -100,7 +100,7 @@ export const ChartPanel = memo(function ChartPanel() {
       ctx.strokeStyle = lpCol; ctx.lineWidth = dpr; ctx.setLineDash([2 * dpr, 3 * dpr]);
       ctx.beginPath(); ctx.moveTo(0, y(st.price)); ctx.lineTo(W, y(st.price)); ctx.stroke(); ctx.setLineDash([]);
       ctx.fillStyle = lpCol; ctx.fillRect(W - 74 * dpr, y(st.price) - 8 * dpr, 74 * dpr, 16 * dpr);
-      ctx.fillStyle = '#02030A'; ctx.font = `bold ${9.5 * dpr}px "JetBrains Mono"`;
+      ctx.fillStyle = C.void; ctx.font = `bold ${9.5 * dpr}px "JetBrains Mono"`;
       ctx.fillText(fmt(st.sym, st.price), W - 70 * dpr, y(st.price) + 4 * dpr);
 
       /* animated radar scan sweep across the chart */
