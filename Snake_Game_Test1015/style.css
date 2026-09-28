@@ -1,0 +1,157 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #1a1a2e;
+  font-family: 'Courier New', monospace;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  color: #e6e6e6;
+}
+
+.game-container {
+  background: #16213e;
+  border: 4px solid #0f3460;
+  border-radius: 16px;
+  padding: 24px;
+  text-align: center;
+  box-shadow: 0 0 40px rgba(15, 52, 96, 0.8);
+  max-width: 460px;
+  width: 100%;
+}
+
+h1 {
+  color: #4ecca3;
+  letter-spacing: 3px;
+  margin-bottom: 4px;
+  font-size: 1.6rem;
+}
+
+.subtitle {
+  color: #a0a0b8;
+  font-size: 0.8rem;
+  margin-bottom: 16px;
+}
+
+.score-board {
+  display: flex;
+  justify-content: space-between;
+  background: #0f3460;
+  padding: 10px 16px;
+  border-radius: 8px;
+  margin-bottom: 14px;
+  font-size: 0.9rem;
+}
+
+.score-board strong {
+  color: #4ecca3;
+}
+
+.canvas-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+canvas {
+  background: #0b0c10;
+  border: 3px solid #4ecca3;
+  border-radius: 8px;
+  display: block;
+  image-rendering: pixelated;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(11, 12, 16, 0.9);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 8px;
+}
+
+.overlay.hidden {
+  display: none;
+}
+
+.overlay-content h2 {
+  color: #e94560;
+  margin-bottom: 10px;
+}
+
+.overlay-content p {
+  margin-bottom: 16px;
+}
+
+.controls {
+  margin-top: 14px;
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+button {
+  background: #4ecca3;
+  color: #0b0c10;
+  border: none;
+  padding: 10px 20px;
+  font-family: inherit;
+  font-weight: bold;
+  font-size: 0.9rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.1s, background 0.2s;
+}
+
+button:hover {
+  background: #3db892;
+  transform: scale(1.05);
+}
+
+button:active {
+  transform: scale(0.95);
+}
+
+.mobile-controls {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.mobile-controls button {
+  width: 56px;
+  height: 44px;
+  padding: 0;
+  font-size: 1.1rem;
+  background: #0f3460;
+  color: #4ecca3;
+}
+
+.mobile-controls button:hover {
+  background: #1a4a7a;
+}
+
+.mobile-row {
+  display: flex;
+  gap: 6px;
+}
+
+.hint {
+  margin-top: 14px;
+  font-size: 0.75rem;
+  color: #a0a0b8;
+}
+
+@media (max-width: 480px) {
+  canvas {
+    width: 300px;
+    height: 300px;
+  }
+}

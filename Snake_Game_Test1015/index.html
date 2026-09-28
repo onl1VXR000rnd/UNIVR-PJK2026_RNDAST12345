@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Snake Game - Nokia Classic</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="game-container">
+    <h1>🐍 SNAKE GAME</h1>
+    <p class="subtitle">Klasik Nokia 3310 Edition</p>
+
+    <div class="score-board">
+      <span>SKOR: <strong id="score">0</strong></span>
+      <span>TERBAIK: <strong id="highScore">0</strong></span>
+    </div>
+
+    <div class="canvas-wrapper">
+      <canvas id="gameCanvas" width="400" height="400"></canvas>
+      <div id="gameOver" class="overlay hidden">
+        <div class="overlay-content">
+          <h2>GAME OVER 💀</h2>
+          <p>Skor kamu: <strong id="finalScore">0</strong></p>
+          <button id="restartBtn">🔄 Main Lagi</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="controls">
+      <button id="startBtn">▶ Mulai</button>
+      <button id="pauseBtn">⏸ Jeda</button>
+    </div>
+
+    <div class="mobile-controls">
+      <button data-dir="UP">▲</button>
+      <div class="mobile-row">
+        <button data-dir="LEFT">◀</button>
+        <button data-dir="DOWN">▼</button>
+        <button data-dir="RIGHT">▶</button>
+      </div>
+    </div>
+
+    <p class="hint">Gunakan tombol panah / WASD untuk bergerak</p>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
