@@ -1,4 +1,5 @@
 node_modules/
-dist/
+# dist/ is intentionally tracked: it powers the GitHub Pages live demo link
+# (AEON_LTX_TradingOS/dist/) — rebuild with `npx vite build` before pushing.
 *.local
 .DS_Store
