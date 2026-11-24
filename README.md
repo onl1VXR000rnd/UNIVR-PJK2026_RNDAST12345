@@ -7,6 +7,7 @@ Universal Project Repository2026-VM1
 |---------|-----------|-----------|
 | 🐍 Snake Game (Test1015) | Web game snake klasik ala Nokia 3310 — HTML + CSS + JS murni | [▶ Klik untuk Bermain](https://onl1vxr000rnd.github.io/UNIVR-PJK2026_RNDAST12345/Snake_Game_Test1015/) |
 | ⚡ AEON LTX TradingOS **v3.0-MIDNIGHT-OPS** | Mockup UI/UX Trading Dashboard Control Panel — Vite + React 19 + TS, hybrid FUI per `references/UIUX_DESIGN.md` (restrained tactical palette, hairline grid, instrument-grade), data dummy real-time (tanpa API key) | [▶ Buka Dashboard](https://onl1vxr000rnd.github.io/UNIVR-PJK2026_RNDAST12345/AEON_LTX_TradingOS/dist/) |
+| 🎛️ SoundLabs **UIX101** | RnD SFX engine TradingOS — vanilla HTML/CSS/JS + Web Audio hybrid (synth ⟂ sample), Sound Lab (live tweak + export preset JSON) & Event Simulator (rate limiting, priority, Notification API), backend Python OOP mock WS :8765 | [▶ Buka Sound Lab](https://onl1vxr000rnd.github.io/UNIVR-PJK2026_RNDAST12345/SoundLabsUIX101/) |
 
 ### 📋 Changelog — AEON LTX TradingOS
 

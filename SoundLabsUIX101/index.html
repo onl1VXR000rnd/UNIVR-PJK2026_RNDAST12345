@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SOUND LABS UIX101 — TradingOS SFX RnD</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<!-- ═══════════════ TOPBAR ═══════════════ -->
+<header class="topbar">
+  <div class="brand">
+    <span class="brand-mark">◢◤</span>
+    <span class="brand-name">SOUND<span class="accent">LABS</span></span>
+    <span class="brand-ver">UIX101 · TradingOS SFX RnD</span>
+  </div>
+  <div class="topbar-status">
+    <span class="chip" id="chip-engine"><i class="dot dot-off"></i>ENGINE IDLE</span>
+    <span class="chip" id="chip-ws"><i class="dot dot-off"></i>WS OFFLINE</span>
+    <span class="chip chip-mode" id="chip-mode">MODE: ELEGANT</span>
+    <label class="toggle-wrap" title="Ambient drone (Deus Ex / Blade Runner vibe)">
+      <input type="checkbox" id="tgl-ambient" />
+      <span class="toggle-box"></span><span class="toggle-label">AMBIENT</span>
+    </label>
+    <button class="btn btn-ghost" id="btn-mute" title="Master mute (M)">🔊 MASTER</button>
+  </div>
+</header>
+
+<!-- ═══════════════ TABS ═══════════════ -->
+<nav class="tabs">
+  <button class="tab active" data-tab="lab">⌁ SOUND LAB</button>
+  <button class="tab" data-tab="sim">▣ EVENT SIMULATOR</button>
+  <span class="tabs-fill"></span>
+  <span class="master-vol-wrap">
+    MASTER <input type="range" id="master-vol" min="0" max="100" value="70" />
+    <b id="master-vol-val">70</b>
+  </span>
+</nav>
+
+<main>
+<!-- ═══════════════════════════════════════════════
+     ASPEK 1 — SOUND LAB
+════════════════════════════════════════════════ -->
+<section class="page active" id="page-lab">
+  <div class="lab-grid">
+
+    <!-- LEFT: voice selector + audition -->
+    <div class="panel col-voices">
+      <div class="panel-head"><h2>VOICE MATRIX</h2><span class="panel-tag">HYBRID: SYNTH + SAMPLE</span></div>
+      <div class="voice-list" id="voice-list"><!-- injected --></div>
+      <div class="audience-box">
+        <button class="btn btn-play" id="btn-audition">▶ AUDITION SELECTED</button>
+        <canvas id="scope" width="520" height="120"></canvas>
+        <div class="scope-legend">OSCILLOSCOPE · LIVE OUTPUT</div>
+      </div>
+    </div>
+
+    <!-- CENTER: parameter tweaking -->
+    <div class="panel col-params">
+      <div class="panel-head"><h2>PARAM TWEAKER — <span class="accent" id="cur-voice-name">BUY_BLIP</span></h2></div>
+      <div class="param-group">
+        <h3>SYNTH CORE</h3>
+        <div class="slider-row"><label>PITCH OFFSET</label><input type="range" id="p-pitch" min="-24" max="24" step="1" value="0"><span class="val" id="v-pitch">0 st</span></div>
+        <div class="slider-row"><label>DETUNE</label><input type="range" id="p-detune" min="0" max="50" step="1" value="12"><span class="val" id="v-detune">12 ct</span></div>
+        <div class="slider-row"><label>DECAY</label><input type="range" id="p-decay" min="40" max="900" step="10" value="180"><span class="val" id="v-decay">180 ms</span></div>
+        <div class="slider-row"><label>WAVEFORM</label>
+          <div class="seg" id="seg-wave">
+            <button data-w="sawtooth" class="on">SAW</button><button data-w="square">SQ</button><button data-w="triangle">TRI</button><button data-w="sine">SIN</button>
+          </div>
+        </div>
+      </div>
+      <div class="param-group">
+        <h3>FX CHAIN</h3>
+        <div class="slider-row"><label>FILTER CUTOFF</label><input type="range" id="p-cutoff" min="200" max="12000" step="100" value="3200"><span class="val" id="v-cutoff">3200 Hz</span></div>
+        <div class="slider-row"><label>BITCRUSH</label><input type="range" id="p-crush" min="0" max="100" step="5" value="25"><span class="val" id="v-crush">25 %</span></div>
+        <div class="slider-row"><label>SWEEP DEPTH</label><input type="range" id="p-sweep" min="0" max="24" step="1" value="7"><span class="val" id="v-sweep">+7 st</span></div>
+        <div class="slider-row"><label>REVERB SEND</label><input type="range" id="p-reverb" min="0" max="100" step="5" value="15"><span class="val" id="v-reverb">15 %</span></div>
+        <div class="slider-row"><label>VOICES / LEVEL</label><input type="range" id="p-level" min="10" max="100" step="5" value="80"><span class="val" id="v-level">80 %</span></div>
+      </div>
+      <div class="preset-bar">
+        <button class="btn" id="btn-reset">↺ RESET DEFAULT</button>
+        <button class="btn btn-accent" id="btn-export">⇩ EXPORT PRESET JSON</button>
+        <span class="hint" id="export-hint"></span>
+      </div>
+    </div>
+
+    <!-- RIGHT: context engine + docs -->
+    <div class="panel col-context">
+      <div class="panel-head"><h2>CONTEXT ENGINE</h2><span class="panel-tag">PITCH ∝ PROFIT/LOT</span></div>
+      <div class="ctx-block">
+        <p class="ctx-desc">Pada voice <b>TP_HIT</b> / <b>SL_HIT</b>, pitch &amp; arpeggio density otomatis mengikuti konteks trade:</p>
+        <div class="slider-row"><label>PROFIT ($)</label><input type="range" id="ctx-profit" min="-500" max="2000" step="10" value="320"><span class="val" id="v-profit">$320</span></div>
+        <div class="slider-row"><label>LOT SIZE</label><input type="range" id="ctx-lot" min="1" max="50" step="1" value="10"><span class="val" id="v-lot">1.00</span></div>
+        <button class="btn btn-play wide" id="btn-ctx-play">▶ PLAY CONTEXTUAL TP_HIT</button>
+        <div class="ctx-readout" id="ctx-readout">root=— · notes=— · dir=—</div>
+      </div>
+      <div class="urgency-block">
+        <div class="panel-head sm"><h2>URGENCY PROFILE</h2></div>
+        <div class="seg seg-full" id="seg-urgency">
+          <button data-u="elegant" class="on">ELEGANT</button><button data-u="aggressive">AGGRESSIVE</button>
+        </div>
+        <p class="ctx-desc">Elegant = subtle &amp; tasteful · Aggressive = layered, louder, alarm character untuk SL/margin.</p>
+      </div>
+      <div class="docs-block">
+        <div class="panel-head sm"><h2>SIGNAL FLOW</h2></div>
+        <pre class="codebox">Python SimEngine (OOP)
+   │  websocket :8765
+   ▼
+wsClient ──► SoundRouter ──► SoundEngine
+             (priority +     (Web Audio:
+              rate-limit)     synth ⟂ samples ⟂ fx)
+                                │
+                                ▼ tab hidden + critical
+                          Notification API</pre>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     ASPEK 2 — EVENT SIMULATOR
+════════════════════════════════════════════════ -->
+<section class="page" id="page-sim">
+  <div class="sim-grid">
+
+    <div class="panel col-fire">
+      <div class="panel-head"><h2>FIRE EVENTS</h2><span class="panel-tag">MANUAL TRIGGERS</span></div>
+      <div class="fire-pad">
+        <button class="btn fire f-buy"  data-ev='{"type":"order_filled","side":"buy","price":2145.25,"lot":1.0}'>▲ BUY FILL</button>
+        <button class="btn fire f-sell" data-ev='{"type":"order_filled","side":"sell","price":2143.80,"lot":1.0}'>▼ SELL FILL</button>
+        <button class="btn fire f-tp"   data-ev='{"type":"tp_hit","profit":480,"lot":2.0}'>◎ TP HIT</button>
+        <button class="btn fire f-sl"   data-ev='{"type":"sl_hit","loss":-260,"lot":1.5}'>✕ SL HIT</button>
+        <button class="btn fire f-margin" data-ev='{"type":"margin_warning","level":82}'>⚠ MARGIN WARN</button>
+        <button class="btn fire f-error" data-ev='{"type":"error","code":"REJECT_133"}'>⛔ ORDER ERROR</button>
+        <button class="btn fire f-signal" data-ev='{"type":"ea_signal","dir":"long","conf":0.87}'>◉ EA SIGNAL</button>
+        <button class="btn fire f-burst" id="btn-burst">⚡ BURST TICK ×30</button>
+      </div>
+      <div class="stream-block">
+        <div class="panel-head sm"><h2>MOCK STREAM</h2></div>
+        <label class="toggle-wrap big">
+          <input type="checkbox" id="tgl-stream" />
+          <span class="toggle-box"></span><span class="toggle-label">AUTO EVENT STREAM (random)</span>
+        </label>
+        <div class="slider-row"><label>RATE</label><input type="range" id="stream-rate" min="1" max="20" step="1" value="4"><span class="val" id="v-rate">4 ev/s</span></div>
+      </div>
+      <div class="rl-block">
+        <div class="panel-head sm"><h2>RATE LIMITER</h2></div>
+        <div class="slider-row"><label>MIN GAP</label><input type="range" id="rl-gap" min="0" max="300" step="10" value="90"><span class="val" id="v-gap">90 ms</span></div>
+        <div class="statline"><span>played <b id="st-played">0</b></span><span>throttled <b id="st-throttled">0</b></span><span>dropped <b id="st-dropped">0</b></span></div>
+      </div>
+    </div>
+
+    <div class="panel col-log">
+      <div class="panel-head"><h2>EVENT LOG</h2><span class="panel-tag">WEBSOCKET :8765</span></div>
+      <div class="log-toolbar">
+        <button class="btn btn-ghost sm" id="btn-clear-log">CLEAR</button>
+        <span class="hint">critical events di tab background → browser notification</span>
+      </div>
+      <div class="event-log" id="event-log"></div>
+    </div>
+
+  </div>
+</section>
+</main>
+
+<footer class="statusbar">
+  <span>SOUNDLABS UIX101 · vanilla HTML/CSS/JS · Web Audio API hybrid engine</span>
+  <span class="spacer"></span>
+  <span id="foot-clock">--:--:--</span>
+  <span>·</span>
+  <span>target: desktop 1080p+</span>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>
